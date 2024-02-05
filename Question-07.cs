@@ -1,83 +1,90 @@
-// Write a Console Application program to simulate a basic ATM machine. Allow the user to check balance, deposit money, and withdraw money. Display appropriate messages based on user actions. (Create separate functions for individual operations.)
-
-
 using System;
 
-class Program
+
+namespace Question_07
 {
-    static double balance = 1000; // Initial balance
-
-    static void Main()
+    internal class Program
     {
-        while (true)
+        static double balance = 1000;   // Initial balance
+
+        static void CheckBalance()
         {
-            Console.WriteLine("1. Check Balance");
-            Console.WriteLine("2. Deposit Money");
-            Console.WriteLine("3. Withdraw Money");
-            Console.WriteLine("4. Exit");
+            Console.WriteLine($"Current Balance: ${balance}");
+        }
 
-            Console.Write("Enter your choice: ");
-            int choice = int.Parse(Console.ReadLine());
+        static void DepositMoney()
+        {
+            Console.WriteLine("Enter the amount to deposit: $");
+            double depositAmount = Convert.ToDouble(Console.ReadLine());
 
-            switch (choice)
+            while (depositAmount <= 0)
             {
-                case 1:
-                    CheckBalance();
-                    break;
-                case 2:
-                    DepositMoney();
-                    break;
-                case 3:
-                    WithdrawMoney();
-                    break;
-                case 4:
-                    Console.WriteLine("Exiting program. Thank you!");
-                    return;
-                default:
-                    Console.WriteLine("Invalid choice. Please try again.");
-                    break;
+                Console.WriteLine("Invalid input. Enter a valid amount to deposit: $");
+                depositAmount = Convert.ToDouble(Console.ReadLine());
             }
-        }
-    }
 
-    static void CheckBalance()
-    {
-        Console.WriteLine($"Your balance is: ${balance}");
-    }
-
-    static void DepositMoney()
-    {
-        Console.Write("Enter the amount to deposit: $");
-        double amount = double.Parse(Console.ReadLine());
-
-        if (amount > 0)
-        {
-            balance += amount;
-            Console.WriteLine($"Deposit successful. Your new balance is: ${balance}");
+            balance += depositAmount;
+            Console.WriteLine($"Deposit successful. New Balance: ${balance}");
         }
-        else
-        {
-            Console.WriteLine("Invalid amount. Please enter a positive value.");
-        }
-    }
 
-    static void WithdrawMoney()
-    {
-        Console.Write("Enter the amount to withdraw: $");
-        double amount = double.Parse(Console.ReadLine());
+        static void WithdrawMoney()
+        {
+            Console.WriteLine("\nEnter the amount to withdraw: $");
+            double withdrawAmount = Convert.ToDouble(Console.ReadLine());
 
-        if (amount > 0 && amount <= balance)
-        {
-            balance -= amount;
-            Console.WriteLine($"Withdrawal successful. Your new balance is: ${balance}");
+            while (withdrawAmount <= 0 || withdrawAmount > balance)
+            {
+                if (withdrawAmount <= 0)
+                {
+                    Console.WriteLine("Invalid input. Enter a valid amount to withdraw: $");
+                }
+                else if (withdrawAmount > balance)
+                {
+                    Console.WriteLine("Insufficient funds. Enter a valid amount to withdraw: $");
+                }
+
+                withdrawAmount = Convert.ToDouble(Console.ReadLine());
+            }
+
+            balance -= withdrawAmount;
+            Console.WriteLine($"Withdraw successful. New Balance: ${balance}");
         }
-        else if (amount > balance)
+
+        static void Main(string[] args)
         {
-            Console.WriteLine("Insufficient funds. Withdrawal failed.");
-        }
-        else
-        {
-            Console.WriteLine("Invalid amount. Please enter a positive value.");
+            while (true)
+            {
+                Console.WriteLine("ATM Simulation Menu: ");
+                Console.WriteLine("1. Check Balance");
+                Console.WriteLine("2. Deposit Money");
+                Console.WriteLine("3. Withdraw Money");
+                Console.WriteLine("4. Exit");
+                Console.WriteLine("Enter your choice (1-4): ");
+
+                int choice = Convert.ToInt32(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        CheckBalance();
+                        break;
+                    case 2:
+                        DepositMoney();
+                        break;
+                    case 3:
+                        WithdrawMoney();
+                        break;
+                    case 4:
+                        Console.WriteLine("Exiting ATM Simulation. Thank you!");
+                        Console.ReadLine(); // Avoid closing the console
+                        return;
+                    default:
+                        Console.WriteLine("Invalid input. Enter a valid choice (1-4): ");
+                        break;
+                }
+
+                Console.WriteLine();
+            }
         }
     }
 }
